@@ -20,6 +20,8 @@
 ### Example Code
 
 ```
+program main
+
 block sayHelloTo(name,times)
 {
     until i:1==>@times
@@ -35,6 +37,8 @@ call sayHelloTo('admin',@time)
 
 
 ```
+program main
+
 var int a 30
 var int b 30
 
@@ -49,6 +53,8 @@ not
 ```
 
 ```
+program main
+
 until i:1==>30
 {
     is '@i' == '10'

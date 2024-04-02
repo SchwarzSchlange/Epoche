@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,15 +8,55 @@ using static Epoche.Token;
 
 namespace Epoche
 {
-    internal class Parser
+    public class Parser
     {
-        public static void ParseLine(string LineText,int LineIndex)
+        public static EpocheClass PreParseForProgramInformation(string programPath)
         {
-            Line line = new Line { LineIndex = LineIndex, LineTokens = new List<Token>(),LineValue = LineText };
+            if (!File.Exists(programPath)) { Log.Error($"Pre Parsing Error : The given path for the epoche class does not exist! ({programPath})"); return null; }
+
+            int index = 1;
+
+            const Int32 BufferSize = 128;
+            using (var fileStream = File.OpenRead(programPath))
+
+            using (var streamReader = new StreamReader(fileStream, Encoding.UTF8, true, BufferSize))
+            {
+                String line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    line = line.Trim();
+                    var stringTokens = line.Split(' ');
+
+                    if (stringTokens[0] == "program")
+                    {
+                        if (stringTokens.Length != 2) { Log.Error("Please give program information for the class"); return null; }
+                        
+                        string programName = stringTokens[1];
+
+                        var epocheClass = new EpocheClass();
+
+                        epocheClass.ProgramName = programName;
+                        epocheClass.referencePathToClassFile = programPath;
+                        epocheClass.ProgramEngine.LastScriptPath = programPath;
+                       
+
+                        return epocheClass;
+                    }
+
+                    index++;
+                }
+            }
+
+            return null;
+        }
+
+        public static void ParseLine(string LineText,int LineIndex,EpocheClass epocheClass)
+        {
+            Line line = new Line { LineIndex = LineIndex, LineTokens = new List<Token>(),LineValue = LineText,RootClass = epocheClass};
             Tokenize(line);
 
 
-            Program.epocheEngine.ScriptLines.Add(line);
+            epocheClass.ProgramEngine.ScriptLines.Add(line);
         }
 
         private static int posLayer = 0;

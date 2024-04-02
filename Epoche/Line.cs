@@ -12,6 +12,8 @@ namespace Epoche
         public int LineIndex { get; set; }
         public string LineValue { get; set; }
 
+        public EpocheClass RootClass { get; set; }
+
 
         public void UpdateIndicies()
         {
@@ -27,7 +29,7 @@ namespace Epoche
             if (this == null) { return null; }
             if (LineIndex - 1 >= 0)
             {
-                return Program.epocheEngine.ScriptLines[LineIndex - 1];
+                return RootClass.ProgramEngine.ScriptLines[LineIndex - 1];
             }
             else
             {
@@ -38,11 +40,11 @@ namespace Epoche
         public Line GetLineAfter()
         {
             if(this == null) { return null; }
-            if (LineIndex <= Program.epocheEngine.ScriptLines.Count)
+            if (LineIndex <= RootClass.ProgramEngine.ScriptLines.Count)
             {
                 try
                 {
-                    return Program.epocheEngine.ScriptLines[LineIndex];
+                    return RootClass.ProgramEngine.ScriptLines[LineIndex];
                 }
                 catch { return null; }
             }

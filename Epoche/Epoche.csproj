@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Block.cs" />
     <Compile Include="Epoche.cs" />
+    <Compile Include="EpocheClass.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="Line.cs" />
     <Compile Include="Log.cs" />
